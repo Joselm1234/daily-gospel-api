@@ -64,7 +64,7 @@ Once deployed, your API will be available at your custom Vercel domain, for exam
 ### Endpoints
 
 - **Development:** `http://localhost:3000/api/gospel`
-- **Production (Vercel):** `https://your-project-name.vercel.app/api/gospel`
+- **Production (Vercel):** `https://daily-gospel-api.vercel.app/api/gospel`
 
 ### Query Parameters
 
@@ -76,7 +76,7 @@ Once deployed, your API will be available at your custom Vercel domain, for exam
 ### Example Production Request
 
 ```bash
-curl -s "https://your-project-name.vercel.app/api/gospel?date=2026-06-18&church=protestant"
+curl -s "https://daily-gospel-api.vercel.app/api/gospel?date=2026-06-18&church=protestant"
 ```
 
 ### Example Response (`200 OK`)

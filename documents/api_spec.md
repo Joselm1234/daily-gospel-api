@@ -8,6 +8,7 @@ This document provides the API specification, JSON schema, testing instructions,
 
 - **Endpoint:** `/api/gospel`
 - **Method:** `GET`
+- **Production Host:** `https://daily-gospel-api.vercel.app`
 - **CORS Allowed:** Yes (`Access-Control-Allow-Origin: *`)
 - **Caching Policy:** Edge Cache (`s-maxage=86400, stale-while-revalidate`)
 
