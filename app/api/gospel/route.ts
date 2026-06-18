@@ -147,6 +147,33 @@ function cleanHtml(html: string): string {
 }
 
 /**
+ * Translates a citation string with English book name to Spanish and standardizes formatting.
+ * E.g., "Matthew 18:1-20" -> "Mateo 18,1-20"
+ */
+function translateCitationToSpanish(citation: string): string {
+  const translations: { [key: string]: string } = {
+    matthew: "Mateo",
+    mark: "Marcos",
+    luke: "Lucas",
+    john: "Juan",
+    acts: "Hechos",
+    romans: "Romanos",
+    revelation: "Apocalipsis",
+  };
+
+  const match = citation.match(/^([A-Za-z]+)\s+(.+)$/);
+  if (match) {
+    const book = match[1].toLowerCase();
+    const rest = match[2];
+    if (translations[book]) {
+      const formattedRest = rest.replace(/[:.]/, ",");
+      return `${translations[book]} ${formattedRest}`;
+    }
+  }
+  return citation;
+}
+
+/**
  * Handle OPTIONS preflight requests.
  */
 export async function OPTIONS() {
@@ -242,7 +269,7 @@ export async function GET(request: Request) {
               if (passage) {
                 gospelData = {
                   date: dateStr,
-                  citation: cleanHtml(gospelReading.citation),
+                  citation: translateCitationToSpanish(cleanHtml(gospelReading.citation)),
                   passage: cleanHtml(passage),
                   source: "Lectio-API.org / Reina Valera 1909",
                 };
@@ -270,7 +297,7 @@ export async function GET(request: Request) {
               if (passage) {
                 gospelData = {
                   date: dateStr,
-                  citation: cleanHtml(gospelReading.display),
+                  citation: translateCitationToSpanish(cleanHtml(gospelReading.display)),
                   passage: cleanHtml(passage),
                   source: "Orthocal.info / Reina Valera 1909",
                 };
