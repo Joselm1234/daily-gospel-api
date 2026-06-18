@@ -231,7 +231,14 @@ export async function GET(request: Request) {
           const citationRaw = await citationRes.text();
           const passageRaw = await passageRes.text();
 
-          if (citationRaw && passageRaw && !citationRaw.includes("<html>")) {
+          const isErrorResponse =
+            citationRaw.includes("Reader Evangelizo Error") ||
+            passageRaw.includes("Reader Evangelizo Error") ||
+            citationRaw.includes("wrong param") ||
+            passageRaw.includes("wrong param") ||
+            citationRaw.includes("<html>");
+
+          if (citationRaw && passageRaw && !isErrorResponse) {
             const cleanCitation = cleanHtml(citationRaw)
               .replace(/^Evangelio según San\s+/i, "")
               .replace(/^Evangelio según\s+/i, "")
