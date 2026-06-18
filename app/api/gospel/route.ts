@@ -212,8 +212,8 @@ export async function GET(request: Request) {
               .trim();
 
             const cleanPassage = cleanHtml(passageRaw)
-              .replace(/\s*Extraído de la Biblia.*$/is, "")
-              .replace(/\s*Para recibir cada mañana.*$/is, "")
+              .replace(/\s*Extraído de la Biblia[\s\S]*$/i, "")
+              .replace(/\s*Para recibir cada mañana[\s\S]*$/i, "")
               .trim();
 
             gospelData = {
