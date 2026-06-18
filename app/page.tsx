@@ -43,7 +43,7 @@ export default function Home() {
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 
       <main style={styles.container}>
         <header style={styles.header}>
@@ -54,10 +54,12 @@ export default function Home() {
           </p>
         </header>
 
+        {/* Section 1: Dashboard (Interactive Client) */}
         <section style={styles.dashboard}>
           {/* Controls Card */}
           <div style={styles.card}>
-            <h2 style={styles.cardTitle}>Configure Request</h2>
+            <h2 style={styles.cardTitle}>Interactive Client</h2>
+            <p style={styles.cardDesc}>Test the endpoint dynamically by configuring parameters below.</p>
             <form onSubmit={fetchGospel} style={styles.form}>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Denomination (Church)</label>
@@ -88,25 +90,18 @@ export default function Home() {
               </button>
             </form>
 
-            <div style={styles.linksContainer}>
-              <h3 style={styles.smallHeading}>Useful Links</h3>
-              <ul style={styles.linksList}>
-                <li>
-                  <a href="/api/health" target="_blank" rel="noreferrer" style={styles.link}>
-                    🔍 System Health Status (`/api/health`)
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="https://github.com/Joselm1234/daily-gospel-api" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    style={styles.link}
-                  >
-                    📦 GitHub Repository
-                  </a>
-                </li>
-              </ul>
+            <div style={styles.quickLinks}>
+              <a href="/api/health" target="_blank" rel="noreferrer" style={styles.quickLinkBtn}>
+                🔍 System Health Status
+              </a>
+              <a 
+                href="https://github.com/Joselm1234/daily-gospel-api" 
+                target="_blank" 
+                rel="noreferrer" 
+                style={styles.quickLinkBtn}
+              >
+                📦 GitHub Repository
+              </a>
             </div>
           </div>
 
@@ -123,7 +118,7 @@ export default function Home() {
               <div style={styles.placeholderContainer}>
                 <span style={styles.placeholderIcon}>📖</span>
                 <p style={styles.placeholderText}>
-                  Select a church and date, then query the API to preview the response here.
+                  Configure the parameters and click "Query API" to preview the live JSON and scripture text.
                 </p>
               </div>
             )}
@@ -153,6 +148,98 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Section 2: Detailed API Documentation */}
+        <section style={styles.documentationSection}>
+          <div style={{ ...styles.card, ...styles.docCard }}>
+            <h2 style={styles.docSectionTitle}>📚 API Reference & Documentation</h2>
+            <div style={styles.divider}></div>
+
+            {/* Endpoints */}
+            <div style={styles.docGroup}>
+              <h3 style={styles.docSubheading}>Base Endpoint</h3>
+              <div style={styles.endpointBox}>
+                <span style={styles.methodBadge}>GET</span>
+                <code style={styles.code}>/api/gospel</code>
+              </div>
+            </div>
+
+            {/* Parameters Table */}
+            <div style={styles.docGroup}>
+              <h3 style={styles.docSubheading}>Query Parameters</h3>
+              <div style={styles.tableWrapper}>
+                <table style={styles.table}>
+                  <thead>
+                    <tr>
+                      <th style={styles.th}>Parameter</th>
+                      <th style={styles.th}>Type</th>
+                      <th style={styles.th}>Default</th>
+                      <th style={styles.th}>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={styles.td}><strong>`date`</strong></td>
+                      <td style={styles.td}>String</td>
+                      <td style={styles.td}>Today's date</td>
+                      <td style={styles.td}>The target date in `YYYY-MM-DD` format (e.g. `2026-06-18`).</td>
+                    </tr>
+                    <tr>
+                      <td style={styles.td}><strong>`church`</strong></td>
+                      <td style={styles.td}>String</td>
+                      <td style={styles.td}>`catholic`</td>
+                      <td style={styles.td}>
+                        The liturgical style to resolve. Options:
+                        <ul style={styles.bulletList}>
+                          <li>`catholic` — Roman Catholic (using Libro del Pueblo de Dios)</li>
+                          <li>`protestant` — Mainline Protestant (Reina Valera 1909)</li>
+                          <li>`orthodox` — Eastern Orthodox (Reina Valera 1909)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Response Schema */}
+            <div style={styles.docGroup}>
+              <h3 style={styles.docSubheading}>JSON Response Format</h3>
+              <p style={styles.docText}>
+                Every successful request returns a `200 OK` status with the following JSON structure:
+              </p>
+              <pre style={styles.codeBlock}>
+{`{
+  "date": "2026-06-18",
+  "citation": "Matthew 18:1-20",
+  "passage": "[1] EN aquel tiempo se llegaron los discípulos á Jesús...",
+  "source": "Lectio-API.org / Reina Valera 1909"
+}`}
+              </pre>
+            </div>
+
+            {/* Code Integration */}
+            <div style={styles.docGroup}>
+              <h3 style={styles.docSubheading}>Integration Examples</h3>
+              
+              <h4 style={styles.docMiniTitle}>cURL</h4>
+              <pre style={styles.codeBlock}>
+{`curl -X GET "https://daily-gospel-api.vercel.app/api/gospel?church=protestant&date=2026-06-18"`}
+              </pre>
+
+              <h4 style={styles.docMiniTitle}>JavaScript / Fetch</h4>
+              <pre style={styles.codeBlock}>
+{`fetch("https://daily-gospel-api.vercel.app/api/gospel?church=protestant")
+  .then(res => res.json())
+  .then(data => {
+    console.log("Citation:", data.citation);
+    console.log("Passage:", data.passage);
+  })
+  .catch(err => console.error(err));`}
+              </pre>
+            </div>
+          </div>
+        </section>
+
         <footer style={styles.footer}>
           <p>© 2026 Daily Gospel API. Ready for production integrations.</p>
         </footer>
@@ -177,7 +264,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   header: {
     textAlign: 'center',
     marginBottom: '2.5rem',
-    maxWidth: '600px',
+    maxWidth: '650px',
   },
   badge: {
     display: 'inline-block',
@@ -193,7 +280,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   title: {
     fontFamily: '"Playfair Display", Georgia, serif',
-    fontSize: '2.75rem',
+    fontSize: '3rem',
     fontWeight: 600,
     margin: '0 0 0.5rem 0',
     background: 'linear-gradient(to right, #ffffff, #93c5fd)',
@@ -201,7 +288,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     WebkitTextFillColor: 'transparent',
   },
   subtitle: {
-    fontSize: '1rem',
+    fontSize: '1.05rem',
     color: '#9ca3af',
     lineHeight: 1.5,
     margin: 0,
@@ -212,13 +299,17 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: '1.5rem',
     width: '100%',
     maxWidth: '1000px',
-    flex: 1,
     alignItems: 'stretch',
     flexWrap: 'wrap',
+    marginBottom: '2rem',
+  },
+  documentationSection: {
+    width: '100%',
+    maxWidth: '1000px',
   },
   card: {
     flex: '1 1 350px',
-    backgroundColor: 'rgba(17, 24, 39, 0.6)',
+    backgroundColor: 'rgba(17, 24, 39, 0.55)',
     backdropFilter: 'blur(16px)',
     border: '1px solid rgba(255, 255, 255, 0.08)',
     borderRadius: '16px',
@@ -227,16 +318,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
   },
+  docCard: {
+    padding: '2rem',
+  },
   resultCard: {
     flex: '1.5 1 450px',
     minHeight: '350px',
     justifyContent: 'center',
   },
   cardTitle: {
-    fontSize: '1.25rem',
+    fontSize: '1.35rem',
     fontWeight: 600,
-    margin: '0 0 1.25rem 0',
+    margin: '0 0 0.35rem 0',
     color: '#f3f4f6',
+  },
+  cardDesc: {
+    fontSize: '0.9rem',
+    color: '#9ca3af',
+    margin: '0 0 1.25rem 0',
   },
   form: {
     display: 'flex',
@@ -254,7 +353,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#9ca3af',
   },
   select: {
-    backgroundColor: '#111827',
+    backgroundColor: '#0c0f1a',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '8px',
     color: '#f3f4f6',
@@ -263,10 +362,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     outline: 'none',
     cursor: 'pointer',
     fontFamily: 'inherit',
-    transition: 'border-color 0.2s',
   },
   input: {
-    backgroundColor: '#111827',
+    backgroundColor: '#0c0f1a',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '8px',
     color: '#f3f4f6',
@@ -274,7 +372,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: '0.95rem',
     outline: 'none',
     fontFamily: 'inherit',
-    transition: 'border-color 0.2s',
   },
   button: {
     backgroundColor: '#2563eb',
@@ -288,32 +385,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: 'background-color 0.2s, transform 0.1s',
     marginTop: '0.5rem',
   },
-  linksContainer: {
-    marginTop: '2rem',
-    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-    paddingTop: '1.25rem',
-  },
-  smallHeading: {
-    fontSize: '0.85rem',
-    fontWeight: 600,
-    color: '#9ca3af',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    margin: '0 0 0.75rem 0',
-  },
-  linksList: {
-    listStyleType: 'none',
-    padding: 0,
-    margin: 0,
+  quickLinks: {
     display: 'flex',
     flexDirection: 'column',
     gap: '0.65rem',
+    marginTop: '1.5rem',
   },
-  link: {
-    color: '#60a5fa',
+  quickLinkBtn: {
+    display: 'block',
+    textAlign: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    border: '1px solid rgba(255, 255, 255, 0.06)',
+    borderRadius: '8px',
+    color: '#93c5fd',
     textDecoration: 'none',
-    fontSize: '0.9rem',
-    transition: 'color 0.2s',
+    fontSize: '0.85rem',
+    padding: '0.65rem',
+    fontWeight: 500,
+    transition: 'background-color 0.2s, color 0.2s',
   },
   loadingContainer: {
     display: 'flex',
@@ -328,7 +417,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: '3px solid rgba(255, 255, 255, 0.1)',
     borderTop: '3px solid #2563eb',
     borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
   },
   loadingText: {
     color: '#9ca3af',
@@ -412,6 +500,99 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#d1d5db',
     margin: '0 0 1rem 0',
     textAlign: 'justify',
+  },
+  docSectionTitle: {
+    fontSize: '1.65rem',
+    fontWeight: 600,
+    color: '#ffffff',
+    margin: '0 0 1rem 0',
+  },
+  docGroup: {
+    marginBottom: '2rem',
+  },
+  docSubheading: {
+    fontSize: '1.2rem',
+    fontWeight: 600,
+    color: '#f3f4f6',
+    margin: '0 0 0.75rem 0',
+  },
+  docText: {
+    fontSize: '0.95rem',
+    color: '#9ca3af',
+    lineHeight: 1.5,
+    margin: '0 0 1rem 0',
+  },
+  endpointBox: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    backgroundColor: '#0c0f1a',
+    padding: '0.75rem 1rem',
+    borderRadius: '8px',
+    border: '1px solid rgba(255, 255, 255, 0.06)',
+  },
+  methodBadge: {
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    color: '#10b981',
+    fontWeight: 700,
+    fontSize: '0.8rem',
+    padding: '0.25rem 0.5rem',
+    borderRadius: '4px',
+    border: '1px solid rgba(16, 185, 129, 0.2)',
+  },
+  code: {
+    fontFamily: '"Fira Code", monospace',
+    fontSize: '0.95rem',
+    color: '#60a5fa',
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontSize: '0.95rem',
+    textAlign: 'left',
+  },
+  th: {
+    borderBottom: '2px solid rgba(255, 255, 255, 0.08)',
+    padding: '0.75rem',
+    color: '#9ca3af',
+    fontWeight: 600,
+  },
+  td: {
+    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+    padding: '0.75rem',
+    color: '#d1d5db',
+    verticalAlign: 'top',
+  },
+  bulletList: {
+    margin: '0.35rem 0 0 0',
+    paddingLeft: '1.25rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+    color: '#9ca3af',
+  },
+  codeBlock: {
+    fontFamily: '"Fira Code", monospace',
+    fontSize: '0.85rem',
+    backgroundColor: '#0c0f1a',
+    border: '1px solid rgba(255, 255, 255, 0.06)',
+    borderRadius: '8px',
+    padding: '1rem',
+    color: '#a7f3d0',
+    overflowX: 'auto',
+    margin: '0 0 1.25rem 0',
+    lineHeight: 1.45,
+  },
+  docMiniTitle: {
+    fontSize: '0.9rem',
+    fontWeight: 600,
+    color: '#9ca3af',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    margin: '0 0 0.5rem 0',
   },
   footer: {
     marginTop: '3rem',
